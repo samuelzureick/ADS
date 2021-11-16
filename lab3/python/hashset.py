@@ -7,6 +7,14 @@ class hashset:
         self.verbose = config.verbose
         self.mode = config.mode
         self.hash_table_size = config.init_size
+
+        self.hashTable = [cell() for x in range(self.hash_table_size)]
+        self.collisionCount = 0
+        self.accessCount = 0
+        self.num_entries = 0
+        
+
+
                 
     # Helper functions for finding prime numbers
     def isPrime(self, n):
@@ -23,27 +31,76 @@ class hashset:
         return n
         
     def insert(self, value):
-        # TODO code for inserting into  hash table
-        print("Placeholder")
+        accessCount += 1
+        hasSpace = false
+
+        if (self.num_entries == self.hash_table_size):
+            quit()
+
+        if (self.mode == HashingModes.HASH_2_LINEAR_PROBING):
+            sum = 0
+            for i in range(len(value)):
+                sum += ord(value[i]) ** (len(value)-i)
+
+            location = sum % self.hash_table_size
+            if (self.hashTable[location].state == state.empty or self.hashTable[location].state == state.deleted):
+                self.hashTable[location].setValue(value)
+                self.num_entries += 1
+            else:
+                collisionHandlerLinear(location, value)
+
         
+    def collisionHandlerLinear(self, location, value):
+        loc = location + 1
+        val = value
+        while (loc < self.hash_table_size):
+            self.collisionCount += 1
+            if (hashTable[loc].state == state.empty or hashTable[loc].state == state.deleted):
+                hashTable[location].setValue(value)
+                self.num_entries += 1
+                return null
+            loc+=1
+
+        loc = 0
+        while (loc < location):
+            self.collisionCount += 1
+            if (hashTable[loc].state == state.empty or hashTable[loc].state == state.deleted):
+                hashTable[location].setValue(value)
+                self.num_entries += 1
+                return null
+            loc+=1
+
     def find(self, value):
-        # TODO code for looking up in hash table
-        print("Placeholder")
+        if (self.mode == HashingModes.HASH_2_LINEAR_PROBING):
+            sum = 0
+            for i in range(len(value)):
+                sum += ord(value[i]) ** (len(value)-i)
+            if (self.hashTable[sum].state == state.in_use):
+                return self.hashTable[sum].key
+        return null
         
     def print_set(self):
-        # TODO code for printing hash table
-        print("Placeholder")
+        for i in range(self.hash_table_size):
+            print("Hash: " +i +" value: " +self.hashTable[i].key +"\n")
         
     def print_stats(self):
-        # TODO code for printing statistics
-        print("Placeholder")
+        print("Average collisions per access: " +self.collisionCount/self.accessCount +"\n")
         
 # This is a cell structure assuming Open Addressing
 # It should contain and element that is the key and a state which is empty, in_use or deleted
 # You will need alternative data-structures for separate chaining
 class cell:
     def __init__(self):
-        pass
+        self.state = state.empty
+
+    def setValue(self, val):
+        self.key = val
+        self.state = state.in_use
+
+    def deleteValue(self, val):
+        self.val = Null
+        self.state = state.deleted
+
         
 class state(Enum):
     empty = 0
