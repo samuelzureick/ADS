@@ -31,13 +31,13 @@ class hashset:
         return n
         
     def insert(self, value):
-        accessCount += 1
-        hasSpace = false
+        self.accessCount += 1
+
 
         if (self.num_entries == self.hash_table_size):
             quit()
 
-        if (self.mode == HashingModes.HASH_2_LINEAR_PROBING):
+        if (self.mode == HashingModes.HASH_1_LINEAR_PROBING):
             sum = 0
             for i in range(len(value)):
                 sum += ord(value[i]) ** (len(value)-i)
@@ -58,7 +58,7 @@ class hashset:
             if (hashTable[loc].state == state.empty or hashTable[loc].state == state.deleted):
                 hashTable[location].setValue(value)
                 self.num_entries += 1
-                return null
+                return None
             loc+=1
 
         loc = 0
@@ -67,24 +67,24 @@ class hashset:
             if (hashTable[loc].state == state.empty or hashTable[loc].state == state.deleted):
                 hashTable[location].setValue(value)
                 self.num_entries += 1
-                return null
+                return None
             loc+=1
 
     def find(self, value):
-        if (self.mode == HashingModes.HASH_2_LINEAR_PROBING):
+        if (self.mode == HashingModes.HASH_1_LINEAR_PROBING):
             sum = 0
             for i in range(len(value)):
                 sum += ord(value[i]) ** (len(value)-i)
-            if (self.hashTable[sum].state == state.in_use):
-                return self.hashTable[sum].key
-        return null
+            if (self.hashTable[sum].key == value):
+                return True
+        return False
         
     def print_set(self):
         for i in range(self.hash_table_size):
-            print("Hash: " +i +" value: " +self.hashTable[i].key +"\n")
+            print("Hash: " +str(i) +" value: " +self.hashTable[i].key +"\n")
         
     def print_stats(self):
-        print("Average collisions per access: " +self.collisionCount/self.accessCount +"\n")
+        print("Average collisions per access: " +str(self.collisionCount/self.accessCount) +"\n")
         
 # This is a cell structure assuming Open Addressing
 # It should contain and element that is the key and a state which is empty, in_use or deleted
