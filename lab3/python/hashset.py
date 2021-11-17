@@ -12,6 +12,8 @@ class hashset:
         self.collisionCount = 0
         self.accessCount = 0
         self.num_entries = 0
+        self.accesses = 0
+        self.inHere = False
         
 
 
@@ -29,61 +31,102 @@ class hashset:
         while (not self.isPrime(n)):
             n = n + 1
         return n
+
         
     def insert(self, value):
+        def collisionHandlerLinear(self, location, value):
+            loc = location + 1
+            val = value
+            while (loc < self.hash_table_size):
+                self.collisionCount += 1
+                if (self.hashTable[loc].state == state.empty or self.hashTable[loc].state == state.deleted):
+                    if (self.hashTable[loc].getValue() == value):
+                        return None
+                    self.hashTable[location].setValue(value)
+                    self.num_entries += 1
+                    return None
+                loc+=1
+
+            loc = 0
+            while (loc < location):
+                self.collisionCount += 1
+                if (self.hashTable[loc].state == state.empty or self.hashTable[loc].state == state.deleted):
+                    if (self.hashTable[loc].getValue() == value):
+                        return None
+                    self.hashTable[location].setValue(value)
+                    self.num_entries += 1
+                    return None
+                loc+=1
+
         self.accessCount += 1
 
 
-        if (self.num_entries == self.hash_table_size):
-            quit()
+        if (self.num_entries > self.hash_table_size*.75):
+            self.inHere = True
+            self.oldTable = self.hash_table
+            self.hashTable = [cell() for x in range(2*self.hash_table_size)]
+            self.hash_table_size *= 2
+            for i in range (self.hash_table_size/2):
+                if self.oldTable[i].state == state.in_use.value:
+                    insert(self.oldTable[i])
 
-        if (self.mode == HashingModes.HASH_1_LINEAR_PROBING):
+
+
+        if (self.mode == HashingModes.HASH_1_LINEAR_PROBING.value):
+            self.accesses += 1
+            sum = 0
+            for i in range(len(value)):
+                sum += ord(value[i])
+
+            location = sum % self.hash_table_size
+            if ((self.hashTable[location].state == state.empty.value or self.hashTable[location].state == state.deleted.value) and not find(self, value)):
+                self.hashTable[location].setValue(value)
+                self.num_entries += 1
+            elif (self.hashTable[location].getValue() == value):
+                return None
+            else:
+                collisionHandlerLinear(self, location, value)
+
+        elif (self.mode == HashingModes.HASH_1_QUADRATIC_PROBING.value):
+            self.accesses += 1
             sum = 0
             for i in range(len(value)):
                 sum += ord(value[i]) ** (len(value)-i)
 
             location = sum % self.hash_table_size
-            if (self.hashTable[location].state == state.empty or self.hashTable[location].state == state.deleted):
+            if ((self.hashTable[location].state == state.empty.value or self.hashTable[location].state == state.deleted.value) and not find(self, value)):
                 self.hashTable[location].setValue(value)
                 self.num_entries += 1
+            elif (self.hashTable[location].getValue() == value):
+                return None
             else:
-                collisionHandlerLinear(location, value)
+                collisionHandlerLinear(self, location, value)
 
-        
-    def collisionHandlerLinear(self, location, value):
-        loc = location + 1
-        val = value
-        while (loc < self.hash_table_size):
-            self.collisionCount += 1
-            if (hashTable[loc].state == state.empty or hashTable[loc].state == state.deleted):
-                hashTable[location].setValue(value)
-                self.num_entries += 1
-                return None
-            loc+=1
-
-        loc = 0
-        while (loc < location):
-            self.collisionCount += 1
-            if (hashTable[loc].state == state.empty or hashTable[loc].state == state.deleted):
-                hashTable[location].setValue(value)
-                self.num_entries += 1
-                return None
-            loc+=1
 
     def find(self, value):
-        if (self.mode == HashingModes.HASH_1_LINEAR_PROBING):
+        if (self.mode == HashingModes.HASH_1_LINEAR_PROBING.value):
+            sum = 0
+            for i in range(len(value)):
+                sum += ord(value[i])
+            if (self.hashTable[sum%self.hash_table_size].getValue() == value):
+                return True
+        elif (self.mode == HashingModes.HASH_1_QUADRATIC_PROBING.value):
             sum = 0
             for i in range(len(value)):
                 sum += ord(value[i]) ** (len(value)-i)
-            if (self.hashTable[sum].key == value):
+            if (self.hashTable[sum%self.hash_table_size].getValue() == value):
                 return True
         return False
         
     def print_set(self):
         for i in range(self.hash_table_size):
             print("Hash: " +str(i) +" value: " +self.hashTable[i].key +"\n")
-        
+      
+    
+
     def print_stats(self):
+        print("number of entries: " +str(self.num_entries))
+        print("Size of hashtable: " +str(self.hash_table_size))
         print("Average collisions per access: " +str(self.collisionCount/self.accessCount) +"\n")
         
 # This is a cell structure assuming Open Addressing
@@ -92,6 +135,7 @@ class hashset:
 class cell:
     def __init__(self):
         self.state = state.empty
+        self.key = None
 
     def setValue(self, val):
         self.key = val
@@ -100,6 +144,9 @@ class cell:
     def deleteValue(self, val):
         self.val = Null
         self.state = state.deleted
+    def getValue(self):
+        return self.key
+
 
         
 class state(Enum):
