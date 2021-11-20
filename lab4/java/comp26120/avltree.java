@@ -101,25 +101,6 @@ public class avltree implements PriorityQueue {
 	
     }
 
-    public void rightRotate() {
-	avltree l = this.left.copy();
-	if (l.right != null) {
-	    this.left = l.right.copy();
-	} else {
-	    this.left = null;
-	}
-	l.right = this.copy();
-
-	this.depth = max(height(this.left), height(this.right)) + 1;
-	l.depth = max(height(l.left), this.depth) + 1;
-
-	this.value = l.value;
-	this.priority = l.priority;
-	this.left = l.left;
-	this.right = l.right;
-	this.depth = l.depth;
-    }
-    
     public avltree shallow_copy() {
 	return new avltree(priority, value, left, right, depth);
     }
