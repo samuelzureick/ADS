@@ -1,16 +1,16 @@
 package comp26120;
 
-public class llist1 implements PriorityQueue {
+public class bad3 implements PriorityQueue {
     String value;
     int priority;
     llist1 next = null;
     llist1 prev = null;
 
-    public llist1() {
+    public bad3() {
 	priority = 0;
     }
 
-    public llist1(String value, int priority) {
+    public bad3(String value, int priority) {
         // A node to be inserted into a list
         this.value = value;
         this.priority = priority;

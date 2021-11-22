@@ -1,6 +1,6 @@
 package comp26120;
 
-public class llist1 implements PriorityQueue {
+public class bad1 implements PriorityQueue {
     String value;
 
     public boolean contains(String value, int priority) {
@@ -8,7 +8,6 @@ public class llist1 implements PriorityQueue {
     }
 
     public void insert(String value, int priority) {
-	this.value = value;
     }
 
     public boolean is_empty() {
@@ -16,7 +15,7 @@ public class llist1 implements PriorityQueue {
     }
 
     public String pop_min() {
-	return value;
+	return null;
     }
 
     public void print() {}
