@@ -7,6 +7,7 @@
 #include <limits.h>
 #include <stdbool.h>
 
+#include "global.h"
 #include "pq.h"
 
 
@@ -18,9 +19,9 @@ struct llist {
 };
 
 // Can be redefined if Value_Type changes
-int compare(Value_Type a, Value_Type b){
-  return strcmp(a,b);
-}
+//int compare(Value_Type a, Value_Type b){
+//  return strcmp(a,b);
+//}
 
 struct llist* initialize_pq (int size){
   // Use a dummy node for the head of the list 
