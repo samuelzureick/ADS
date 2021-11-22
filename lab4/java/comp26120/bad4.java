@@ -3,8 +3,8 @@ package comp26120;
 public class bad4 implements PriorityQueue {
     String value = null;
     int priority;
-    llist1 next = null;
-    llist1 prev = null;
+    bad4 next = null;
+    bad4 prev = null;
     
     public bad4() {
 	// Use a dummy node for the head of the list;
@@ -20,7 +20,7 @@ public class bad4 implements PriorityQueue {
     public boolean contains(String value, int priority) {
 	// Linear search
 	// Skip dummy
-	llist1 tmp_next = next;
+	bad4 tmp_next = next;
 	while (tmp_next != null) {
 	    if (tmp_next.value.equals(value) && tmp_next.priority == priority) {
 		return true;
@@ -32,7 +32,7 @@ public class bad4 implements PriorityQueue {
     }
 
     public void insert(String value, int priority) {
-	llist1 node = new llist1(value, priority);
+	bad4 node = new bad4(value, priority);
 	// Insert after dummy
 	node.next = this.next;
 	if (this.next != null) {
@@ -51,7 +51,7 @@ public class bad4 implements PriorityQueue {
     // be the pointer to the list even after we remove the minimum element
     public String pop_min() {
 	if (this.next != null) {
-	    llist1 best_node = this.next;
+	    bad4 best_node = this.next;
 	    String value = best_node.value;
 
 	    // Remove best_node
