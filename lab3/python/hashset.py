@@ -30,20 +30,21 @@ class hashset:
 
         
     def insert(self, value):
+        # linear probing collision handler
         def collisionHandlerLinear(self, hashSum, value):
             for i in range(self.hash_table_size):
                 loc = (hashSum+i) % self.hash_table_size
                 self.collisionCount += 1
                 if (self.hashTable[loc].state == state.empty or self.hashTable[loc].state == state.deleted):
                     if (self.hashTable[loc].getValue() == value):
-                        return None
+                        return None # duplicate handling
                     self.hashTable[loc].setValue(value)
                     self.num_entries += 1
                     return None
 
         self.accessCount += 1
 
-
+        # resize and rehash when over 80% full
         if (self.num_entries > self.hash_table_size*.8):
             self.oldTable = self.hashTable
             newSize = self.nextPrime(2*self.hash_table_size)
@@ -55,9 +56,9 @@ class hashset:
                 if self.oldTable[i].state.value == state.in_use.value:
                     self.insert(self.oldTable[i].getValue())
 
-
-
+        # first hash alg
         if (self.mode == HashingModes.HASH_1_LINEAR_PROBING.value):
+            # polynoial summation, then reverse string and do this again, xor these, mod length -> index
             sum = 0
             sum2 = 0
             leng = len(value)
@@ -72,11 +73,12 @@ class hashset:
             if ((self.hashTable[location].state == state.empty.value or self.hashTable[location].state == state.deleted.value)):
                 self.hashTable[location].setValue(value)
                 self.num_entries += 1
-            elif (self.hashTable[location].getValue() == value):
+            elif (self.hashTable[location].getValue() == value): # duplicate handling
                 return None
             else:
-                collisionHandlerLinear(self, sum+1, value)
+                collisionHandlerLinear(self, sum+1, value) # collision handling
         elif (self.mode == HashingModes.HASH_2_LINEAR_PROBING.value):
+            # polynomial summaiton % size -> index
             sum = 0
             for i in range(len(value)):
                 sum += ord(value[i]) ** (len(value)-i)
@@ -85,27 +87,28 @@ class hashset:
             if ((self.hashTable[location].state == state.empty.value or self.hashTable[location].state == state.deleted.value)):
                 self.hashTable[location].setValue(value)
                 self.num_entries += 1
-            elif (self.hashTable[location].getValue() == value):
+            elif (self.hashTable[location].getValue() == value): # duplicate handling
                 return None
             else:
-                collisionHandlerLinear(self, sum+1, value)
+                collisionHandlerLinear(self, sum+1, value) # collision handling
         else:
             print("**** MODE NOT IMPLEMENTED ****")
 
     def find(self, value):
         def linearCollisionFinder(self, hashSum, value):
+            # helper function for find w linear collisions
             for i in range(self.hash_table_size):
                 loc = (hashSum+i) % self.hash_table_size
                 self.collisionCount += 1
-                if (self.hashTable[loc].state == state.empty):
+                if (self.hashTable[loc].state == state.empty): # cant be after this
                     return False
-                elif (self.hashTable[loc].state == state.deleted):
+                elif (self.hashTable[loc].state == state.deleted): # could be after this
                     pass
-                elif (self.hashTable[loc].getValue() == value):
+                elif (self.hashTable[loc].getValue() == value): # found
                     return True
 
         if (self.mode == HashingModes.HASH_1_LINEAR_PROBING.value):
-            #self.print_set()
+            # same hash function as above
             sum = 0
             sum2 = 0
             leng = len(value)
@@ -115,23 +118,22 @@ class hashset:
             for i in range(leng):
                 sum2 += ord(revValue[i]) ** (leng-i)
             sum ^= sum2
-            #print("searching for: " +value)
             
             loc = sum%self.hash_table_size
-            #print("found: " +str(self.hashTable[loc].getValue()))
-            if (self.hashTable[loc].getValue() == value):
+
+            if (self.hashTable[loc].getValue() == value): #if found
                 return True
             else:
-                return linearCollisionFinder(self, sum+1, value)
+                return linearCollisionFinder(self, sum+1, value) # collision handler
         elif (self.mode == HashingModes.HASH_2_LINEAR_PROBING.value):
             sum = 0
             for i in range(len(value)):
                 sum += ord(value[i]) ** (len(value)-i)
             loc = sum %self.hash_table_size
-            if (self.hashTable[loc].getValue() == value):
+            if (self.hashTable[loc].getValue() == value): # found
                 return True
             else:
-                return linearCollisionFinder(self, sum+1, value)
+                return linearCollisionFinder(self, sum+1, value) # collision handler
         return False
         
     def print_set(self):
