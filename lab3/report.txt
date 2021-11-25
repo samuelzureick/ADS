@@ -1,4 +1,4 @@
-Name: 
+Name: Samuel Zureick 
 
 
 This file has been provided to help you structure your thoughts when discussing Lab 3, Part c with your marker. Some questions can be answered with a single sentence, some may require much longer answers. You are free to edit/rearrange this file as much as you want.
@@ -13,13 +13,25 @@ Initial Expectations
 
 >> Do you expect this data structure to be preferable to the others on all inputs, most  inputs, some inputs? Why?
 
+I expect that the binary search tree will be preferable to the others for most inputs, because it tends to have the best performance for the typical data I feed into it.
+I expect that the hashset will be preferable others on some inputs, because in my experience my algorithm generates a lot of collisions but still works reasonably quickly.
+I expect that the dynamic array will be preferable to the others for some inputs because it is very consistent; a sorted input would not be a huge issue for a dynamic array, but would be worst case for a binary serach tree find operation.
 
 
 >> Do you expect your answer to change if the order of the words in your input dictionary is in the best/worst case? Why?
 
+Definatley. 
+I expect that the binary search tree will be preferable to all inputs except for sorted lists. 
+I expect that the hashset will be preferable others on some inputs, namely those with a large variance in word length and a large dictionary size.
+I expect that the dynamic array will be preferable to the hashset for data with a lot of collisions, so 
+similar strings, but I do not think that the dynamic array will be preferable to a binary serach tree
+except when the input is already sorted.
 
 
 >> Can you phrase what you expect in terms of a one or two sentence hypothesis that you can test?
+
+I expect that the binary search tree will be preferable to the other two options for the average case, but 
+far worse than the other options when the input data is already sorted.
 
 
 ------------------------
@@ -29,22 +41,40 @@ Experimental Design
 
 >> How are you going to define what it means for one data stucture to be preferable to another?
 
+For this experiment, one data structure will be preferable to another if it has a shorter runtime for the same input.
+
 
 
 >> Which conditions will you vary in your experiment? 
 
+In my experiment, I will vary the size of the dictionary, size of the input set, and order of the dictionary.
 
 
 >> How will you vary them? Why did you make these choices? Did you use theoretical complexities, best, worst and average cases to inform your decisions?
-
+I will vary them by making copies of the dictionary and 
+either modifying the size of the dictionary or the input
+set and shuffling the order of the dictionary.  I use worst
+and average case complexities to inform my decisions.
 
 
 >> How will you generate the data for your experiments?
 
+I will start with a large dictionary. I will from 
+this create a small, medium, and large dictionary. I will 
+then shuffle these dictionaries, so I have both a
+sorted and unsorted copy of each size. I will then 
+create an input file that takes a number of words 
+from its respective dictionary scaled to the size of the 
+dictionary, and manipulate a portion of these strings in some 
+known way in order to make them fail the spellcheck, and save
+these input files.
 
 
 >> How will you validate your findings?
-
+I will validate my findings by ensuring reproducability and 
+consistency in the data. I will use algorithms that
+I know to be working according to the spec
+provided by the coursework.
 
 
 ------------------------
@@ -54,11 +84,103 @@ Results and Analysis
 
 >> What results did you record?
 
+---------------+------------+---------+
+Implementation | Dictionary | Time (s)|
+---------------+------------+---------+
+darray         |short sort  |.0486    |
+---------------+------------+---------+
+hashset        |short sort  |.0624    |
+---------------+------------+---------+
+bstree         |short sort  |.0496    |
+---------------+------------+---------+
+darray         |short unsort|.0505    |
+---------------+------------+---------+
+hashset        |short unsort|.0544    |
+---------------+------------+---------+
+bstree         |short unsort|.0490    |
+---------------+------------+---------+
+darray         |med sort    |.0767    |
+---------------+------------+---------+
+hashset        |med sort    |.2374    |
+---------------+------------+---------+
+bstree         |med sort    |.3023    |
+---------------+------------+---------+
+darray         |med unsort  |.0653    |
+---------------+------------+---------+
+hashset        |med unsort  |.2472    |
+---------------+------------+---------+
+bstree         |med unsort  |.1029    |
+---------------+------------+---------+
+darray         |long sort   |2.134    |
+---------------+------------+---------+
+hashset        |long sort   |12.41    |
+---------------+------------+---------+
+bstree         |long sort   |N/A      |
+---------------+------------+---------+
+darray         |long unsort |2.237    |
+---------------+------------+---------+
+hashset        |long unsort |11.85    |
+---------------+------------+---------+
+bstree         |long unsort |3.101    |
+---------------+------------+---------+
 
 >> What does this tell you about the performance of the data structure?
 
+The implementation of the darray structure performed better 
+than all other data structures except in one instance 
+(small unsorted dictionary), where it was beat by bstree
+by a negligible amount. This data struture is consistently
+superior, and sorted vs unsorted arrays don't seem to make 
+much of a difference. 
+
+My implementation of hashset performed horribly in comparison
+to the other data structures, especially for large sets.
+It performed reasonably well for small datasets, but
+the expensive rehashing and inefficient linear probing
+really hurts the performance with big data, at worst nearly
+6x as long a darray for the same data. One notable outlier 
+highlights the performance hit that the bstree gets with sorted 
+data; the hashset actually outperforms this with the medium
+sorted data set by 30%. 
+
+My implementation of binary search tree is on the average
+case prefereable to my implementation of hashset, but 
+is always outperformed by the dynamic array. It performs much 
+better on unsorted data than it does on sorted data for larger 
+datasets, but the difference with smaller data is more 
+negligible. 
 
 >> What is the answer to the question "Under what conditions is it preferable to use this data structure?"
 
+My results show me that the darray is preferable to 
+the other data strcutures under nearly all conditions.
+The most notable difference however is with large sorted
+and unsorted datasets, the performance is consistently
+better than the other structures, and you don't have 
+the max recursion deptch reached like I experienced 
+with the bstree.
+
+It is never preferable to use the hashset data
+structure, at least given my hashing algorithm. 
+Because of the expense of linear probing and rehashing,
+the performance is noticbly horrible with large datasets.
+It was outperformed by everything except for one 
+negligible victory with a very small data-set; this could
+just as easily be explained by the random generation of 
+the mispelled words.
+
+It is not preferable to use bstree data structure 
+under any of my test cases if using darray
+is an option. However, it was significantly
+better than the hashset implementation. It 
+seems to perform best on unsorted lists, and
+the difference between the bstree and hashset
+becomes much larger as the size of the input
+data grows. It is definately not preferable 
+to use this data structure when processing 
+large sorted arrays- python reached max 
+recursion depth on my machine even when I 
+shrunk the large dictionary size from 
+c.455000 words to c.150000 words.
 
 
