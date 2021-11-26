@@ -14,6 +14,30 @@ ifeq (,$(shell echo $(MAKECMDGOALS) | sed 's/.*llist2.*//g'))
 PQ_FLAG=LLIST
 IMP_FLAG=llist2
 endif
+ifeq (,$(shell echo $(MAKECMDGOALS) | sed 's/.*bad1.*//g'))
+PQ_FLAG=LLIST
+IMP_FLAG=bad1
+endif
+ifeq (,$(shell echo $(MAKECMDGOALS) | sed 's/.*bad1.*//g'))
+PQ_FLAG=LLIST
+IMP_FLAG=bad1
+endif
+ifeq (,$(shell echo $(MAKECMDGOALS) | sed 's/.*bad2.*//g'))
+PQ_FLAG=LLIST
+IMP_FLAG=bad2
+endif
+ifeq (,$(shell echo $(MAKECMDGOALS) | sed 's/.*bad3.*//g'))
+PQ_FLAG=LLIST
+IMP_FLAG=bad3
+endif
+ifeq (,$(shell echo $(MAKECMDGOALS) | sed 's/.*bad4.*//g'))
+PQ_FLAG=LLIST
+IMP_FLAG=bad4
+endif
+ifeq (,$(shell echo $(MAKECMDGOALS) | sed 's/.*bad5.*//g'))
+PQ_FLAG=LLIST
+IMP_FLAG=bad5
+endif
 ifeq (,$(shell echo $(MAKECMDGOALS) | sed 's/.*avltree.*//g'))
 PQ_FLAG=AVLTREE
 IMP_FLAG=avltree

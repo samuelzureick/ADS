@@ -1,6 +1,6 @@
 package comp26120;
 
-public class llist1 implements PriorityQueue {
+public class bad5 implements PriorityQueue {
     String value1 = null;
     String value2 = null;
     int priority1;

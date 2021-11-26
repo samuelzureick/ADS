@@ -18,10 +18,14 @@ struct llist {
   struct llist* prev;
 };
 
+// Can be redefined if Value_Type changes
+//int compare(Value_Type a, Value_Type b){
+//  return strcmp(a,b);
+//}
+
 struct llist* initialize_pq (int size){
   // Use a dummy node for the head of the list 
   struct llist* dummy = malloc(sizeof(struct llist)); 
-  check(dummy);
   dummy->value = NULL;
   dummy->priority = 0;
   dummy->next=NULL;
@@ -38,7 +42,8 @@ void tidy (struct llist* list){
   }
 }
 
-bool contains(struct llist* pq, Value_Type value,int priority){
+
+bool contains(struct llist* pq, Value_Type value, int priority){
   // Linear search
   if(pq){
     // Skip dummy
@@ -55,7 +60,6 @@ bool contains(struct llist* pq, Value_Type value,int priority){
 
 void insert(struct llist* list, Value_Type value, int priority){
   struct llist* node = malloc(sizeof(struct llist));
-  check(node);
   node->value=value;
   node->priority=priority;
   // Insert after dummy
@@ -79,17 +83,7 @@ Value_Type pop_min(struct llist* pq){
 
   if(pq && pq->next){
 
-    // Find best
-    int best = INT_MAX; 
-    struct llist* best_node = NULL;
-    struct llist* next = pq->next;
-    while(next){
-      if(next->priority < best){
-        best = next->priority;
-        best_node = next;
-      }
-      next = next->next;
-    }
+    struct llist* best_node = pq->next;
     Value_Type value = best_node->value;
 
     // Remove best_node

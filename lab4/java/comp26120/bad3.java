@@ -1,16 +1,16 @@
 package comp26120;
 
-public class llist1 implements PriorityQueue {
+public class bad3 implements PriorityQueue {
     String value;
     int priority;
-    llist1 next = null;
-    llist1 prev = null;
+    bad3 next = null;
+    bad3 prev = null;
 
-    public llist1() {
+    public bad3() {
 	priority = 0;
     }
 
-    public llist1(String value, int priority) {
+    public bad3(String value, int priority) {
         // A node to be inserted into a list
         this.value = value;
         this.priority = priority;
@@ -20,7 +20,7 @@ public class llist1 implements PriorityQueue {
     public boolean contains(String value, int priority) {
 	// Linear search
 	// Skip dummy
-        llist1 tmp_next = next;
+        bad3 tmp_next = next;
         while (tmp_next != null) {
             if (tmp_next.value.equals(value) && tmp_next.priority == priority) {
                 return true;
@@ -33,7 +33,7 @@ public class llist1 implements PriorityQueue {
     }
 
     public void insert(String value, int priority) {
-	llist1 node = new llist1(value, priority);
+	bad3 node = new bad3(value, priority);
 	// insert after dummy
 	node.next = this.next;
 	if (this.next != null) {
@@ -52,7 +52,7 @@ public class llist1 implements PriorityQueue {
     // be the pointer to the list even after we remove the minimum element
     public String pop_min() {
         if (this.next != null) {
-            llist1 best_node = this.next;
+            bad3 best_node = this.next;
             while (best_node.next != null) {
 		best_node = best_node.next;
             }
