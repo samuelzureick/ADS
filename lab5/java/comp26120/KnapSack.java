@@ -65,7 +65,7 @@ public class KnapSack {
     public void print_instance() {
 	int i;
 	System.out.println("item\tW\tV");
-	for (i = 1; i < Nitems; i++) {
+	for (i = 1; i <= Nitems; i++) {
 	    System.out.format("%d\t%d\t%d\n", temp_indexes.get(i), item_weights.get(i), item_values.get(i));
 	}
 	System.out.format("%d\n", Capacity);
