@@ -227,7 +227,7 @@ public class bnb_kp extends KnapSack {
      public void copy_array(ArrayList<Boolean> from, ArrayList<Boolean> to) {
 	// This copies Nitems elements of one boolean array intto another
 	int i;
-	for (i=0;i<Nitems;i++) {
+	for (i=0;i<=Nitems;i++) {
 	    if (from.get(i) == null) {
 		to.set(i, null);
 	    } else if (from.get(i)) {
