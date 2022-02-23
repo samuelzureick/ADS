@@ -1,5 +1,5 @@
 import sys
-
+import logging
 from knapsack import knapsack
 
 DOUB_MAX = 10e30 # a large number, must be greater than  max value of any solution
@@ -139,11 +139,14 @@ class bnb(knapsack):
         self.pqueue[0] = struc_sol() # set a blank first element
         
         # branch and bound
-
         # start with the empty solution vector
         # compute its value and its bound
+        self.solution_vec=final_sol
+        t = self.frac_bound(self,0)
+        current_best = self.val
         # put current_best = to its value
         # store it in the priority queue
+        self.insert(self)
   
         # LOOP until queue is empty or upper bound is not greater than current_best:
         #   remove the first item in the queue
@@ -155,9 +158,33 @@ class bnb(knapsack):
         #       if value > current_best, set current_best to it, and copy child to final_sol
         #       add child to the queue
         # RETURN
-  
-
-        # YOUR CODE GOES HERE
+        its = 0
+        
+        while True:
+            item = self.removeMax()
+            its += 1
+            lc = struc_sol()
+            self.copy_array(item.solution_vec, lc.solution_vec)
+            rc = struc_sol()
+            self.copy_array(item.solution_vec, rc.solution_vec)
+            kids = [lc,rc]
+            kids[0].solution_vec[its] = True
+            kids[1].solution_vec[its] = False
+            for kid in kids:
+                self.frac_bound(kid, its)
+                if kid.val == -1:
+                    pass
+                else:
+                    if kid.val > current_best:
+                        current_best = kid.val
+                        final_sol[its] = kid.solution_vec[its]
+                        self.insert(kid)
+            if (self.QueueSize == 0):
+                break
+            if (None not in final_sol and self.bound <= current_best):
+                break
+            
+        return
         
     def copy_array(self, array_from, array_to):
         # This copies Nitems elements of one boolean array to another

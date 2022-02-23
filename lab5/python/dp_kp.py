@@ -1,6 +1,8 @@
 import sys
 
 from knapsack import knapsack
+import numpy as np
+import logging
 
 class dp(knapsack):
     def __init__(self, filename):
@@ -27,15 +29,39 @@ class dp(knapsack):
         
         # Initialise V and keep
         # ADD CODE HERE
-        
+        V = []
+        keep = []
+        V = [[None for x in range(W+1)] for x in range(n+1)]
+        keep = [[0 for x in range(W+1)] for x in range(n+1)]
+
         # Set the values of the zeroth row of the partial solutions table to False
         # ADD CODE HERE
+        for i in range(W+1):
+            V[0][i] = 0
         
         # main dynamic programming loops, adding on item at a time and looping through weights from 0 to W
         # ADD CODE HERE
+        for i in range(1,n+1):
+            for w in range(W+1):
+                if (wv[i] <= w) and (v[i] + V[i-1][w-wv[i]] > V[i-1][w]):
+                    V[i][w] = v[i] + V[i-1][w-wv[i]]
+                    keep[i][w] = 1
+                else:
+                    V[i][w] = V[i-1][w]
+                    keep[i][w] = 0
+        # logging.warning(keep)
+        
         
         # now discover which iterms were in the optimal solution
         # ADD CODE HERE
+        total_value = 0
+        total_weight = 0
+        K = W
+        for i in range(n, -1,-1):
+            if keep[i][K] == 1:
+                solution[i] = True
+                K=K-wv[i]
+                
         
         
 knapsk = dp(sys.argv[1])

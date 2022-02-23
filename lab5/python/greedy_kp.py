@@ -6,12 +6,22 @@ class greedy(knapsack):
     def __init__(self, filename):
         knapsack.__init__(self, filename)
         
+    def sort_by_ratio(self):
+        self.temp_indexes = [[i-1, self.item_values[i],self.item_weights[i]] for i in range(1, self.Nitems+1)]
+        
+        self.temp_indexes.sort(key=(lambda x: x[1]/x[2]))
+        self.temp_indexes = [x[0]+1 for x in self.temp_indexes]
+        self.temp_indexes.insert(0, None)
+        
+
+
     def greedy(self):
         self.total_weight=0 # current total weight of the items in the knapsack
         self.total_value=0 # current total profit of the items in the knapsack
-        i = 1
+        
         solution = [None]*(self.Nitems + 1)
         
+
         self.sort_by_ratio() # sort by profit-to-weight ratio
         
         # ADD CODE HERE TO COMPUTE THE GREEDY SOLUTION
@@ -21,6 +31,13 @@ class greedy(knapsack):
         # if an item fits, add it to the knapscak, and
         # do not stop at the first item that doesn't fit
         # - but keep going until all items have been tried.
+        for i in range(1, self.Nitems+1):
+            if self.item_weights[self.temp_indexes[i]] + self.total_weight>self.Capacity:
+                pass
+            else:
+                solution[i] = True
+                self.total_weight += self.item_weights[self.temp_indexes[i]]
+                self.total_value += self.item_values[self.temp_indexes[i]]
         
         print("The greedy solution - not necessarily optimal - is:")
         self.check_evaluate_and_print_sol(solution)
