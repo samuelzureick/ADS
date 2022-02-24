@@ -16,7 +16,7 @@ class enum_knapsack(knapsack):
         best_solution = [False]*(self.Nitems + 1) # (binary) solution veectore for best solution found
         j = 0.0
         
-        self.QUIET = True
+        self.QUIET = False
         best_value = 0 # total value packed in the best solution
         checked = 1
         while (not self.next_binary(solution, self.Nitems)):
@@ -43,8 +43,8 @@ class enum_knapsack(knapsack):
                     best_value = self.total_value
                     best_solution = solution
         print("\r[==========]",end='')
-        print("\nBest value: ", best_value)
-        self.check_evaluate_and_print_sol(best_solution)
+        print("\nvalue="+str(best_value))
+        
         
 
 
